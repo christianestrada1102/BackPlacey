@@ -8,10 +8,14 @@ app.use(express.json())
 const usersRoutes = require('./routes/users')
 const placeysRoutes = require('./routes/placeys')
 const catRoutes = require('./routes/cat')
+const cors = require('cors')
+const authRoutes = require('./routes/auth')
 
+app.use(cors())
 app.use('/users', usersRoutes)
 app.use('/placeys', placeysRoutes)
 app.use('/cat', catRoutes)
+app.use('/auth', authRoutes)
 
 const db = require ('./config/db')
 const PORT = process.env.PORT || 3014
