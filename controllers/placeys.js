@@ -1,4 +1,5 @@
 const db = require('../config/db')
+const fs = require("node:fs")
 
 const getPlaceys = async (req, res) => {
     try {
@@ -20,6 +21,12 @@ const getPlaceyById = async (req, res) => {
     }
 }
 
+function saveImage(file) {
+    const newPath = `./uploads/${Date.now()}-${file.originalname}`
+    fs.renameSync(file.path, newPath)
+    return newPath
+}
+
 const createPlacey = async (req, res) => { 
     try {
 
@@ -29,7 +36,11 @@ const createPlacey = async (req, res) => {
 
         const { id_user, id_cat, name_place, description, address } = req.body
 
-        const image = req.file ? req.file.filename : null 
+        if (!req.file) {
+            return res.status(400).json({ error: 'La imagen es obligatoria' })
+        }
+
+        const image = saveImage(req.file)
         
         if (!name_place || name_place.trim() === '') return res.status(400).json({ error: 'El nombre del placey es obligatorio' })
         const [result] = await db.query(
