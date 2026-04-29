@@ -16,6 +16,7 @@ app.use('/users', usersRoutes)
 app.use('/placeys', placeysRoutes)
 app.use('/cat', catRoutes)
 app.use('/auth', authRoutes)
+app.use('/uploads', express.static('uploads'))
 
 const db = require ('./config/db')
 const PORT = process.env.PORT || 3014

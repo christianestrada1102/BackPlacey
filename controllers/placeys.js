@@ -22,12 +22,19 @@ const getPlaceyById = async (req, res) => {
 
 const createPlacey = async (req, res) => { 
     try {
+
+        console.log("FILE", req.file)
+        console.log("BODY", req.body)
+        console.log("IMAGE:", req.file?.filename)
+
         const { id_user, id_cat, name_place, description, address } = req.body
+
+        const image = req.file ? req.file.filename : null 
         
         if (!name_place || name_place.trim() === '') return res.status(400).json({ error: 'El nombre del placey es obligatorio' })
         const [result] = await db.query(
-            'INSERT INTO placeys (id_user, id_cat, nombre_place, descripcion, direccion) VALUES (?, ?, ?, ?, ?)',
-            [id_user, id_cat, name_place, description, address]
+            'INSERT INTO placeys (id_user, id_cat, nombre_place, descripcion, direccion, url_img) VALUES (?, ?, ?, ?, ?, ?)',
+            [id_user, id_cat, name_place, description, address, image]
         )
         const [newplacey] = await db.query('SELECT * FROM placeys WHERE id_placey = ?', [result.insertId])
         res.status(201).json(newplacey[0])
