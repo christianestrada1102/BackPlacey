@@ -6,8 +6,12 @@ const register = async (req, res) => {
     try {
         const { nombre, email, contraseña } = req.body
        
-        if (!nombre || ! email || !contraseña) {
+        if (!nombre || !email || !contraseña) {
             return res.status(400).json({ error: 'Nombre, email y contraseña son obligatorios' })
+        }
+
+        if (contraseña.trim().length < 8) {
+            return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' })
         }
 
         const [existingUser] = await db.query('SELECT * FROM usuarios WHERE email = ?', [email])

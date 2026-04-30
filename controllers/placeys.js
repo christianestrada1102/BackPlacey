@@ -22,7 +22,7 @@ const getPlaceyById = async (req, res) => {
 }
 
 function saveImage(file) {
-    const newPath = `./uploads/${Date.now()}-${file.originalname}`
+    const newPath = `uploads/${Date.now()}-${file.originalname}`
     fs.renameSync(file.path, newPath)
     return newPath
 }
