@@ -1,7 +1,7 @@
 //importa la libreria
 const express = require('express');
 //intanciar la app
-const app = express();
+const app = express()
 //aca le decimos middelware para json
 app.use(express.json())
 //configurar el puerto (Por convicion es el 3000)

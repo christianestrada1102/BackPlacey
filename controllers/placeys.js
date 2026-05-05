@@ -1,5 +1,7 @@
 const db = require('../config/db')
-const fs = require("node:fs")
+const cloudinary = require ('../config/cloudinary')
+const fs = require('fs')
+
 
 const getPlaceys = async (req, res) => {
     try {
@@ -21,11 +23,6 @@ const getPlaceyById = async (req, res) => {
     }
 }
 
-function saveImage(file) {
-    const newPath = `uploads/${Date.now()}-${file.originalname}`
-    fs.renameSync(file.path, newPath)
-    return newPath
-}
 
 const createPlacey = async (req, res) => { 
     try {
@@ -40,7 +37,11 @@ const createPlacey = async (req, res) => {
             return res.status(400).json({ error: 'La imagen es obligatoria' })
         }
 
-        const image = saveImage(req.file)
+        const uploadResult = await cloudinary.uploader.upload(req.file.path)
+
+        fs.unlinkSync(req.file.path)
+
+        const image = uploadResult.secure_url
         
         if (!name_place || name_place.trim() === '') return res.status(400).json({ error: 'El nombre del placey es obligatorio' })
         const [result] = await db.query(
@@ -50,6 +51,7 @@ const createPlacey = async (req, res) => {
         const [newplacey] = await db.query('SELECT * FROM placeys WHERE id_placey = ?', [result.insertId])
         res.status(201).json(newplacey[0])
     } catch (error) {
+        console.error(error)
         res.status(500).json({ error: 'Error al crear el placey' })
     }
 }
