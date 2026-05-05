@@ -11,12 +11,27 @@ const catRoutes = require('./routes/cat')
 const cors = require('cors')
 const authRoutes = require('./routes/auth')
 
+const http = require('http')
+const { Server } = require('socket.io')
+const socketHandlander = require('./sockets/socketHandlander.js')
+
 app.use(cors())
 app.use('/users', usersRoutes)
 app.use('/placeys', placeysRoutes)
 app.use('/cat', catRoutes)
 app.use('/auth', authRoutes)
 app.use('/uploads', express.static('uploads'))
+
+const server = http.createServer(app)
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:5174',
+        methods: ['GET', 'POST']
+    }
+})
+
+        socketHandlander(io)
+
 
 const db = require ('./config/db')
 const PORT = process.env.PORT || 3014
@@ -25,7 +40,7 @@ const testDBConnectionAndStart = async () => {
     try {
         await db.query('SELECT 1')
         console.log('DB conectada pa')
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log(`Servidor corriendo en http://localhost:${PORT}`)
         })
     } catch (error) {
