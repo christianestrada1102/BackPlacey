@@ -15,6 +15,8 @@ const http = require('http')
 const { Server } = require('socket.io')
 const socketHandlander = require('./sockets/socketHandlander.js')
 
+
+
 app.use(cors())
 app.use('/users', usersRoutes)
 app.use('/placeys', placeysRoutes)
