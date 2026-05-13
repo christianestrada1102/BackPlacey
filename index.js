@@ -13,6 +13,7 @@ const authRoutes = require('./routes/auth')
 
 const http = require('http')
 const { Server } = require('socket.io')
+const paymentRoutes = require('./routes/payment')
 const socketHandlander = require('./sockets/socketHandlander.js')
 
 
@@ -20,6 +21,7 @@ const socketHandlander = require('./sockets/socketHandlander.js')
 app.use(cors())
 app.use('/users', usersRoutes)
 app.use('/placeys', placeysRoutes)
+app.use('/payments', paymentRoutes)
 app.use('/cat', catRoutes)
 app.use('/auth', authRoutes)
 app.use('/uploads', express.static('uploads'))
