@@ -1,6 +1,6 @@
 const db = require('../config/db')
 const cloudinary = require ('../config/cloudinary')
-const fs = require('fs')
+const streamifier = require('streamifier')
 
 
 const getPlaceys = async (req, res) => {
@@ -11,6 +11,8 @@ const getPlaceys = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener placeys' })
     }
 }
+
+
 
 const getPlaceyById = async (req, res) => {
     try {
@@ -37,11 +39,24 @@ const createPlacey = async (req, res) => {
             return res.status(400).json({ error: 'La imagen es obligatoria' })
         }
 
-        const uploadResult = await cloudinary.uploader.upload(req.file.path)
+        const uploadFromBuffer = (buffer) => {
+            return new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder : 'placeys' },
+                    (error, result) => {
+                        if (result) resolve(result)
+                            else reject(error)
+                    }
+                )
 
-        fs.unlinkSync(req.file.path)
+                streamifier.createReadStream(buffer).pipe(stream)
+            })
+        }
 
+        const uploadResult = await uploadFromBuffer(req.file.buffer)
         const image = uploadResult.secure_url
+
+
         
         if (!name_place || name_place.trim() === '') return res.status(400).json({ error: 'El nombre del placey es obligatorio' })
         const [result] = await db.query(
