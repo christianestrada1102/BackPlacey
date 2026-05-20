@@ -70,8 +70,10 @@ const createPlacey = async (req, res) => {
         res.status(201).json(newplacey[0])
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Error al crear el placey' })
+        res.status(500).json({ error: 'Error al crear el placey',
         message:error.message
+        })
+ 
     }
 }
 
