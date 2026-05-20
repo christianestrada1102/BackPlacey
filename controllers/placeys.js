@@ -8,7 +8,10 @@ const getPlaceys = async (req, res) => {
         const [rows] = await db.query('SELECT * FROM placeys')
         res.json(rows)
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener placeys' })
+        res.status(500).json({ error: 'Error al obtener placeys',
+            message: error.message
+        })
+
     }
 }
 
