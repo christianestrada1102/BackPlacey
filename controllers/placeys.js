@@ -5,7 +5,10 @@ const streamifier = require('streamifier')
 
 const getPlaceys = async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT * FROM placeys')
+        const [rows] = await db.query(`
+        SELECT p.*, u.nombre AS nombre_usuario 
+        FROM placeys p 
+        JOIN usuarios u ON p.id_user = u.id_user`)
         res.json(rows)
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener placeys',
