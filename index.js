@@ -3,30 +3,36 @@ const express = require('express');
 //intanciar la app
 const app = express()
 //aca le decimos middelware para json
-app.use(express.json())
-app.get('/', (req, res) => {
-    res.json({message: 'Placey Corrienod al 100'})
-})
-//configurar el puerto (Por convicion es el 3000)
-const usersRoutes = require('./routes/users')
-const placeysRoutes = require('./routes/placeys')
-const catRoutes = require('./routes/cat')
 const cors = require('cors')
-const authRoutes = require('./routes/auth')
-
-const paymentRoutes = require('./routes/payment')
-
 
 
 app.use(cors({
     origin: [
         "http://localhost:5173",
         "http://localhost:5174",
-        "https://front-placey.vercel.app/"
+        "https://front-placey.vercel.app",
+        "https://front-placey-pfzdgr5lg-christians-projects-f256bbbc.vercel.app"
+
     ], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }))
+
+app.use(express.json())
+
+app.get('/', (req, res) => {
+    res.json({message: 'Placey Corrienod al 100'})
+})
+
+
+//configurar el puerto (Por convicion es el 3000)
+const usersRoutes = require('./routes/users')
+const placeysRoutes = require('./routes/placeys')
+const catRoutes = require('./routes/cat')
+const authRoutes = require('./routes/auth')
+
+const paymentRoutes = require('./routes/payment')
+
 
 app.use('/users', usersRoutes)
 app.use('/placeys', placeysRoutes)
