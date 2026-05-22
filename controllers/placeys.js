@@ -72,6 +72,7 @@ const createPlacey = async (req, res) => {
         const [newplacey] = await db.query('SELECT * FROM placeys WHERE id_placey = ?', [result.insertId])
         res.status(201).json(newplacey[0])
     } catch (error) {
+        message: error.message
         console.error(error)
         res.status(500).json({ error: 'Error al crear el placey',
         message:error.message
